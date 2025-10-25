@@ -1,0 +1,18 @@
+{
+    "name": "glaucomartins/sistema-ponto",
+    "type": "project",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Glaucomartins\\SistemaPonto\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Glauco Martins",
+            "email": "github@grmslab.com.br"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
