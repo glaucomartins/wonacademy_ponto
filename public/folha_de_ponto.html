@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Espelho de Ponto – REP‑A</title>
+  <style>
+    :root{
+      --ink:#111;
+      --muted:#555;
+      --line:#222;
+      --accent:#000;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      font: 12px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;
+      color:var(--ink);
+      background:#f6f6f6;
+      margin:0;
+      padding:16px;
+    }
+    .sheet{
+      width:210mm; /* A4 */
+      min-height:297mm;
+      margin:0 auto 16px;
+      background:#fff;
+      color:var(--ink);
+      box-shadow:0 2px 16px rgba(0,0,0,.08);
+      padding:2mm;
+      position:relative;
+    }
+    header{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8mm;
+      align-items:center;
+      border-bottom:1px solid var(--line);
+      padding-bottom:1mm;
+      margin-bottom:1mm;
+    }
+    .brand{font-weight:700;font-size:16px;letter-spacing:.2px}
+    .brand small{display:block;font-weight:500;color:var(--muted);font-size:11px}
+    .doc-title{
+      text-align:right;
+      font-weight:700;
+      font-size:14px;
+    }
+    .meta{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:4mm;
+      margin:1mm 0;
+    }
+    .field{
+      grid-column: span 4;
+    }
+    .field label{display:block;font-size:10px;color:var(--muted);margin-bottom:2px}
+    .field .value{border:1px solid var(--line);padding:6px 8px;border-radius:6px;min-height:28px;font-size: 9px;}
+
+    table{width:100%;border-collapse:collapse;margin-top:4mm}
+    thead th{
+      text-align:left;
+      border:1px solid var(--line);
+      padding:0px 6px;
+      font-size:9px;
+      background:#fafafa;
+    }
+    tbody td{
+      border:1px solid var(--line);
+      padding:5px;
+      height:22px;
+      font-size: 9px;
+    }
+    tbody tr:nth-child(even){background:#fcfcfc}
+
+    .totais{
+      display:grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap:4mm;
+      margin:8mm 0 2mm;
+    }
+    .totais .box{border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+    .totais .box .k{font-size:10px;color:var(--muted)}
+    .totais .box .v{font-weight:700;font-size: 9px;}
+
+    .signatures{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10mm;
+      margin-top:1mm;
+    }
+    .sig{
+      text-align:center;margin-top: -9mm;
+    }
+    .sig .line{border-top:1px solid var(--line);margin-top:16mm;padding-top:3mm}
+    .notice{font-size:10px;color:var(--muted);margin-top:2mm}
+
+    .controls{display:flex;gap:8px;justify-content:flex-end;margin:0 auto 8px;max-width:210mm}
+    .controls button{border:1px solid var(--line);background:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+    @media print{
+      body{background:#fff;padding:0}
+      .sheet{box-shadow:none;margin:0;page-break-after:always}
+      .controls{display:none}
+      thead th{background:#fff}
+      tbody tr:nth-child(even){background:#fff}
+      @page{size:A4; margin:10mm}
+    }
+  </style>
+</head>
+<body>
+  <div class="controls no-print">
+    <button onclick="window.print()">Imprimir</button>
+  </div>
+
+  <section class="sheet" id="espelho">
+    <header>
+      <div class="brand">
+        {{NOME_DA_EMPRESA}}
+        <small>CNPJ: {{CNPJ_DA_EMPRESA}}</small>
+      </div>
+      <div class="doc-title">
+        ESPELHO DE PONTO – REP‑A
+        <div style="font-weight:500;font-size:11px;color:var(--muted)">Portaria MTP 671/2021</div>
+      </div>
+    </header>
+
+    <!-- Dados do colaborador / período -->
+    <div class="meta">
+      <div class="field" style="grid-column:span 6">
+        <label>Colaborador</label>
+        <div class="value">{{NOME_COMPLETO}}</div>
+      </div>
+      <div class="field" style="grid-column:span 3">
+        <label>CPF</label>
+        <div class="value">{{CPF}}</div>
+      </div>
+      <div class="field" style="grid-column:span 3">
+        <label>Matrícula / ID</label>
+        <div class="value">{{MATRICULA}}</div>
+      </div>
+      <div class="field" style="grid-column:span 4">
+        <label>Setor</label>
+        <div class="value">{{SETOR}}</div>
+      </div>
+      <div class="field" style="grid-column:span 4">
+        <label>Cargo</label>
+        <div class="value">{{CARGO}}</div>
+      </div>
+      <div class="field" style="grid-column:span 4">
+        <label>Período (mês/ano)</label>
+        <div class="value">{{MES_ANO}}</div>
+      </div>
+    </div>
+
+    <!-- Tabela de marcações -->
+    <table aria-label="Marcações de ponto">
+      <thead>
+        <tr>
+          <th style="width:18mm">Data</th>
+          <th style="width:22mm">Entrada</th>
+          <th style="width:22mm">Saída Almoço</th>
+          <th style="width:22mm">Retorno Almoço</th>
+          <th style="width:22mm">Saída</th>
+          <th style="width:22mm">Total (h)</th>
+          <th>Ocorrências / Observações</th>
+        </tr>
+      </thead>
+      <tbody id="linhas">
+        <!-- 31 linhas para cobrir qualquer mês; apague as excedentes se quiser -->
+        <tr><td>01/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>02/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>03/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>04/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>05/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>06/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>07/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>08/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>09/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>10/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>11/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>12/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>13/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>14/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>15/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>16/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>17/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>18/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>19/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>20/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>21/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>22/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>23/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>24/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>25/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>26/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>27/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>28/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>29/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>30/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>31/{{MES}}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <!-- Totais do período -->
+    <div class="totais">
+      <div class="box"><div class="k">Horas Contratuais</div><div class="v">{{H_CONTRATUAIS}}</div></div>
+      <div class="box"><div class="k">Horas Trabalhadas</div><div class="v">{{H_TRABALHADAS}}</div></div>
+      <div class="box"><div class="k">Horas Extras</div><div class="v">{{H_EXTRAS}}</div></div>
+      <div class="box"><div class="k">Banco de Horas (+/−)</div><div class="v">{{BANCO_HORAS}}</div></div>
+      <div class="box"><div class="k">Faltas</div><div class="v">{{FALTAS}}</div></div>
+      <div class="box"><div class="k">Atrasos</div><div class="v">{{ATRASOS}}</div></div>
+    </div>
+
+    <!-- Assinaturas -->
+    <div class="signatures">
+      <div class="sig">
+        <div class="line">Assinatura do(a) Empregado(a)</div>
+      </div>
+      <div class="sig">
+        <div class="line">Assinatura do Representante da Empresa</div>
+      </div>
+    </div>
+
+    <p class="notice">
+      Observação: Este espelho refere-se a registros realizados via sistema REP‑A (WhatsApp/online). Em conformidade com a Portaria MTP 671/2021, o intervalo intrajornada é computado entre a entrada e a saída quando não informado.
+    </p>
+  </section>
+
+  <script>
+    // Opcional: preenche o mês automaticamente no placeholder {{MES}} se desejar.
+    // Substitui todas as ocorrências de {{MES}} por MM (01-12) do período informado no campo {{MES_ANO}}.
+    (function(){
+      const el = document.querySelector('#espelho');
+      const period = (el.innerHTML.match(/\{\{MES_ANO\}\}/) ? '{{MES_ANO}}' : '').toString();
+      // Caso queira automatizar, troque manualmente abaixo:
+      // const MM = '08'; // exemplo
+      // el.innerHTML = el.innerHTML.replaceAll('{{MES}}', MM);
+      // Para uso em template engines, ignore este script.
+    })();
+  </script>
+</body>
+</html>

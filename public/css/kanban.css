@@ -1,0 +1,76 @@
+.kanban-board {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.kanban-column {
+    flex: 0 0 300px; /* Fixed width for columns */
+    background-color: #f8f9fc; /* Light background, similar to sb-admin-2 cards */
+    border-radius: 8px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 150px); /* Adjust based on header/footer height */
+}
+
+.kanban-column-header {
+    font-weight: bold;
+    padding: 15px;
+    border-bottom: 1px solid #eaecf4;
+    background-color: #e0e0e0; /* Slightly darker header */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    color: #3a3b45;
+    font-size: 1.1rem;
+}
+
+.kanban-cards {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    min-height: 100px; /* Ensure drop target is visible */
+}
+
+.kanban-card {
+    background-color: #ffffff;
+    border: 1px solid #dddfeb;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 0.1rem 0.5rem 0 rgba(58, 59, 69, 0.05);
+    cursor: grab;
+}
+
+.kanban-card:last-child {
+    margin-bottom: 0;
+}
+
+.kanban-card h5 {
+    font-size: 1rem;
+    color: #4e73df; /* Primary color from sb-admin-2 */
+    margin-bottom: 5px;
+}
+
+.kanban-card p {
+    font-size: 0.9rem;
+    color: #858796;
+    margin-bottom: 5px;
+}
+
+.kanban-card small {
+    font-size: 0.75rem;
+    color: #a7a7a7;
+}
+
+/* Drag and Drop styles */
+.kanban-card.dragging {
+    opacity: 0.5;
+    border: 2px dashed #4e73df;
+}
+
+.kanban-cards.drag-over {
+    background-color: #e9ecef;
+    border: 2px dashed #4e73df;
+}
